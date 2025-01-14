@@ -1,4 +1,4 @@
-# 🎬 Movie Reservation System
+# 🎬 Movie Reservation Service
 
 Welcome to the **Movie Reservation Service**! 🍿🎥
 
@@ -83,6 +83,14 @@ Here are the key routes available:
 
 - Add a **payment gateway integration** to handle payments for reservations.
 - Enable **multi-theater support** for larger cinema chains.
+
+---
+
+---
+
+## 👨‍💻 Status
+
+_In progress._
 
 ---
 
