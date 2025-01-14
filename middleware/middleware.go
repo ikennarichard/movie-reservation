@@ -20,10 +20,12 @@ func AuthMiddleware() gin.HandlerFunc {
 		token, claims, err := utils.ValidateToken(tokenString)
 		if err != nil || !token.Valid {
 			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid token"})
+			return
 		}
 		config.DB.First(&user, claims["user_id"])
 		if user.ID == 0 {
 			c.AbortWithStatus(401)
+			return
 		}
 		c.Set("user_id", uint(claims["user_id"].(float64)))
 		c.Set("user", user)
@@ -36,8 +38,7 @@ func AdminMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role := c.GetString("role")
 		if role != "admin" {
-			c.JSON(403, gin.H{"error": "Access denied"})
-			c.Abort()
+			c.AbortWithStatusJSON(403, gin.H{"error": "Access denied"})
 			return
 		}
 		c.Next()
