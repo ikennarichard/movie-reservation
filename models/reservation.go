@@ -9,5 +9,5 @@ type Reservation struct {
 	UserID      uint      `gorm:"not null" json:"user_id"`
 	ShowtimeID  uint      `gorm:"not null" json:"showtime_id"`
 	Seats      string   `gorm:"not null" json:"reserved_seats"`
-	Price float64 `json:"price"`
+	TotalAmount float64 `json:"total_amount"` // cost of reservation
 }
