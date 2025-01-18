@@ -9,4 +9,5 @@ type Movie struct {
 	PosterImage string `json:"poster_image"`
 	Duration int `json:"duration"` // time in minutes
 	Genres []Genre     `gorm:"many2many:movie_genres;"`
+	Showtimes []Showtime `gorm:"foreignKey:MovieID; constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"showtimes"`
 }

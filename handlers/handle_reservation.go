@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
+	"time"
 	"github.com/gin-gonic/gin"
 	"github.com/ikennarichard/movie-reservation/config"
 	"github.com/ikennarichard/movie-reservation/models"
@@ -15,7 +15,7 @@ type ReserveSeatsRequest struct {
 	UserID     uint   `json:"user_id" binding:"required"`
 	ShowtimeID uint   `json:"showtime_id" binding:"required"`
 	Seats      string `json:"seats" binding:"required"`
-	Price     float64 `json:"price"`
+	TotalAmount     float64 `json:"total_amount"`
 }
 
 func GetAvailableSeats(c *gin.Context) {
@@ -69,6 +69,49 @@ func CancelReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Reservation canceled successfully"})
 }
 
+func GetMoviesByDate(c *gin.Context) {
+
+		dateStr := c.Query("date")
+		if dateStr == "" {
+			c.JSON(400, gin.H{
+				"error": "Date is required in the format YYYY-MM-DD",
+			})
+			return
+		}
+
+		date, err := time.Parse("2006-01-02", dateStr)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Invalid date format. Use YYYY-MM-DD.",
+			})
+			return
+		}
+
+		var movies []models.Movie
+		err = config.DB.Model(&models.Movie{}).Joins("JOIN showtimes ON showtimes.movie_id = movies.id").Where("DATE(showtimes.start_time) = ?", date).Preload("Showtimes", "DATE(start_time) = ?", date).Find(&movies).
+		Error
+
+		if len(movies) == 0 {
+			c.JSON(200, gin.H{
+				"date":    dateStr,
+				"message": "No movies available for the specified date",
+			})
+			return
+		}
+
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": "Failed to retrieve movies. Please try again later.",
+			})
+			return
+		}
+		c.JSON(200, gin.H{
+			"date":    dateStr,
+			"movies":  movies,
+			"message": "Movies successfully retrieved",
+		})
+}
+
 func ReserveSeats(c *gin.Context) {
 	var req ReserveSeatsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -101,7 +144,7 @@ func ReserveSeats(c *gin.Context) {
 		UserID:        req.UserID,
 		ShowtimeID:    req.ShowtimeID,
 		Seats: req.Seats,
-		Price: price,
+		TotalAmount: price,
 	}
 
 	if err := config.DB.Create(&reservation).Error; err != nil {

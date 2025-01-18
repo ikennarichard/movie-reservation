@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/ikennarichard/movie-reservation/config"
 	"github.com/ikennarichard/movie-reservation/models"
@@ -84,7 +82,7 @@ func DeleteMovie(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Movie deleted successfully"})
+	c.JSON(200, gin.H{"message": "Movie deleted successfully"})
 }
 
 func GetMovies(c *gin.Context) {
@@ -102,7 +100,7 @@ func GetMovieByID(c *gin.Context) {
 	var movie models.Movie
 
 	if err := config.DB.First(&movie, id).Error; err != nil {
-		c.JSON(404, gin.H{"error": "Movie not found"})
+		c.AbortWithStatusJSON(404, gin.H{"error": "Movie not found"})
 		return
 	}
 
@@ -121,10 +119,11 @@ func GetMoviesByGenre(c *gin.Context) {
 		c.AbortWithStatusJSON(500, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 
-	c.JSON(http.StatusOK, genreMovies)
+	c.JSON(200, genreMovies)
 }
 
 
