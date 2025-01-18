@@ -22,6 +22,7 @@ func setupRoutes(r *gin.Engine) {
 	{
 		auth.GET("/reservations", handlers.GetUserReservations)
 		auth.POST("/reservations", handlers.ReserveSeats)
+		auth.GET("/movieshowtimes", handlers.GetMoviesByDate)
 		auth.DELETE("/reservations/:id", handlers.CancelReservation)
 		auth.GET("/showtimes/:id/seats", handlers.GetAvailableSeats)
 	}
