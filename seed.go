@@ -3,24 +3,25 @@ package main
 import (
 	"log"
 	"time"
-
+	"github.com/ikennarichard/movie-reservation/config"
 	"github.com/ikennarichard/movie-reservation/models"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 
-func seedData(db *gorm.DB) {
+func seedData() {
 	// Seed Users
 	users := []models.User{
-		{Name: "Ceci", Email: "admin@example.com", Password: "adminpassword120", Role: "admin"},
+		{Name: "Ceci", Email: "admin@mail.com", Password: "adminpassword120", Role: "admin"},
 	}
+
+	
 
 	for _, user := range users {
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
 
-		if err := db.FirstOrCreate(&models.User{}, user).Error; err != nil {
+		if err := config.DB.FirstOrCreate(&models.User{}, user).Error; err != nil {
 			log.Fatalf("Could not seed user: %v", err)
 		}
 	}
@@ -36,28 +37,28 @@ func seedData(db *gorm.DB) {
 
 	var genreMap = make(map[string]models.Genre)
 	for _, genre := range genres {
-		if err := db.FirstOrCreate(&genre, models.Genre{Name: genre.Name}).Error; err != nil {
+		if err := config.DB.FirstOrCreate(&genre, models.Genre{Name: genre.Name}).Error; err != nil {
 			log.Fatalf("Could not seed genre: %v", err)
 		}
 		genreMap[genre.Name] = genre
 	}
 
 	movies := []models.Movie{
-		{Title: "Avengers: Endgame", Description: "The Avengers must assemble once again to stop Thanos and save the universe.", Duration: 136, PosterImage: "avengers-endgame.jpg", Genres: []models.Genre{genreMap["Action"], genreMap["Drama"]}},
-		{Title: "The Hangover", Description: "A group of friends get into a wild adventure after a bachelor party in Las Vegas.", Duration: 136, PosterImage: "the-hangover.jpg", Genres: []models.Genre{genreMap["Comedy"]}},
-		{Title: "Titanic", Description: "A love story aboard the ill-fated RMS Titanic.", Duration: 136, PosterImage: "titanic.jpg", Genres: []models.Genre{genreMap["Romance"], genreMap["Drama"]}},
-		{Title: "It", Description: "A group of children must face their fears and fight a shape-shifting entity known as 'It'.", Duration: 136, PosterImage: "it.jpg", Genres: []models.Genre{genreMap["Horror"]}},
-		{Title: "Spider-Man: No Way Home", Description: "Peter Parker faces challenges that force him to make difficult decisions about his identity.", Duration: 136, PosterImage: "spiderman-no-way-home.jpg", Genres: []models.Genre{genreMap["Action"], genreMap["Comedy"]}},
+		{Title: "Avengers: Endgame", Description: "The Avengers must assemble once again to stop Thanos and save the universe.", Duration: 136, PosterImage: "avengers-endgame.jpg", Genres: []models.Genre{genreMap["Action"], genreMap["Drama"]}, Showtimes: []models.Showtime{} },
+		{Title: "The Hangover", Description: "A group of friends get into a wild adventure after a bachelor party in Las Vegas.", Duration: 136, PosterImage: "the-hangover.jpg", Genres: []models.Genre{genreMap["Comedy"]}, Showtimes: []models.Showtime{}},
+		{Title: "Titanic", Description: "A love story aboard the ill-fated RMS Titanic.", Duration: 136, PosterImage: "titanic.jpg", Genres: []models.Genre{genreMap["Romance"], genreMap["Drama"]}, Showtimes: []models.Showtime{}},
+		{Title: "It", Description: "A group of children must face their fears and fight a shape-shifting entity known as 'It'.", Duration: 136, PosterImage: "it.jpg", Genres: []models.Genre{genreMap["Horror"]}, Showtimes: []models.Showtime{}},
+		{Title: "Spider-Man: No Way Home", Description: "Peter Parker faces challenges that force him to make difficult decisions about his identity.", Duration: 136, PosterImage: "spiderman-no-way-home.jpg", Genres: []models.Genre{genreMap["Action"], genreMap["Comedy"]}, Showtimes: []models.Showtime{}},
 	}
 
 	for _, movie := range movies {
-		if err := db.Create(&movie).Error; err != nil {
+		if err := config.DB.Create(&movie).Error; err != nil {
 			log.Fatalf("Could not seed movie: %v", err)
 		}
 	}
 
 	var movieList []models.Movie
-	if err := db.Find(&movieList).Error; err != nil {
+	if err := config.DB.Find(&movieList).Error; err != nil {
 		log.Fatalf("Could not fetch movies for showtimes: %v", err)
 	}
 
@@ -77,7 +78,7 @@ func seedData(db *gorm.DB) {
 	}
 
 	for _, showtime := range showtimes {
-		if err := db.Create(&showtime).Error; err != nil {
+		if err := config.DB.Create(&showtime).Error; err != nil {
 			log.Fatalf("Could not seed showtime: %v", err)
 		}
 	}
