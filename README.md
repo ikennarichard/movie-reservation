@@ -79,10 +79,11 @@ Here are the key routes available:
 
 ---
 
-## 💡 Future Improvements
+## 💡 Future Improvements/ What I learned
 
 - Add a **payment gateway integration** to handle payments for reservations.
 - Enable **multi-theater support** for larger cinema chains.
+- Updating a table with indexes takes more time than updating a table without (because the indexes also need an update). So, only create indexes on columns that will be frequently searched against.(W3Schools)
 
 ---
 
