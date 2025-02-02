@@ -4,8 +4,6 @@ Welcome to the **Movie Reservation Service**! 🍿🎥
 
 This is a backend system designed to help you manage movie reservations, browse the latest films and reserve seats for your favorite showtimes.
 
----
-
 ## 🌟 Features
 
 - **User Authentication** 🔒  
@@ -22,8 +20,6 @@ This is a backend system designed to help you manage movie reservations, browse 
 
 - **Admin Dashboard** 📊  
   Admins can view all reservations, check seat availability, and get revenue insights.
-
----
 
 ## 🚀 Getting Started
 
@@ -67,8 +63,6 @@ Here are the key routes available:
 - **GET** `/reservations` – View your current reservations.
 - **DELETE** `/reservations/:id` – Cancel a reservation.
 
----
-
 ## 🛠️ Tech Stack
 
 - **Go**
@@ -85,15 +79,9 @@ Here are the key routes available:
 - Enable **multi-theater support** for larger cinema chains.
 - Updating a table with indexes takes more time than updating a table without (because the indexes also need an update). So, only create indexes on columns that will be frequently searched against.(W3Schools)
 
----
-
----
-
 ## 👨‍💻 Status
 
 _In progress._
-
----
 
 ## 📝 Contributing
 
@@ -103,12 +91,6 @@ Contributions are welcome! If you have any ideas for improvements or bug fixes, 
 2. **Add Features** – Got a cool feature in mind? Submit an issue or PR!
 3. **Improve Documentation** – We always love better docs!
 
----
-
 ## 📞 Contact
 
 For questions, suggestions, or if you just want to chat about movies 🎬, feel free to reach out to me via [email](mailto:oguefioforrichard@gmail.com) or raise an issue in the GitHub repository!
-
----
-
-🎉 Enjoy using the **Movie Reservation System**, and may you always get the best seat in the house! 🍿🎥
