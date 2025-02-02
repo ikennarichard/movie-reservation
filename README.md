@@ -71,8 +71,6 @@ Here are the key routes available:
 - **JWT**
 - **PostgreSql**
 
----
-
 ## 💡 Future Improvements/ What I learned
 
 - Add a **payment gateway integration** to handle payments for reservations.
